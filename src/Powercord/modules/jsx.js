@@ -18,16 +18,18 @@
 
 const sucrase = require('sucrase');
 const { join } = require('path');
-const { readFileSync, mkdirSync, statSync, writeFile } = require('fs');
+const { readFileSync, mkdirSync, existsSync, statSync, writeFile } = require('fs');
 const { createHash } = require('crypto');
 
-const cacheDir = join(__dirname, '../../../cache/jsx/');
+const cacheDir = join(__dirname, '../../../.cache');
+
+if (!existsSync(cacheDir)) {
+  mkdirSync(cacheDir);
+}
 
 const checksum = (str) => createHash('sha1').update(str).digest('hex');
 
 module.exports = () => {
-  mkdirSync(cacheDir, { recursive: true });
-
   require.extensions['.jsx'] = (_module, filename) => {
     const stat = statSync(filename);
     const hash = checksum(filename + stat.mtime.toISOString());
