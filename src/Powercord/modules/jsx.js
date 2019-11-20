@@ -47,11 +47,9 @@ module.exports = () => {
 
       writeFile(cached, res, (err) => {
         if (!err) {
-          return;
+          console.error('[JSX]', 'Failed to write to cache');
+          console.error(err);
         }
-
-        console.error('[JSX]', 'Failed to write to cache');
-        console.error(err);
       });
     }
   };
